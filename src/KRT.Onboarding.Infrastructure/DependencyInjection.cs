@@ -1,5 +1,6 @@
 using KRT.Onboarding.Application.Contas.Abstractions;
 using KRT.Onboarding.Domain.Contas;
+using KRT.Onboarding.Infrastructure.Caching;
 using KRT.Onboarding.Infrastructure.Persistence;
 using KRT.Onboarding.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,12 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        return services.AddPersistence(configuration);
+        services.AddPersistence(configuration);
+
+        // Etapa 5 substitui por um cache Redis (cache-aside com TTL diário).
+        services.AddScoped<IContaCache, NoOpContaCache>();
+
+        return services;
     }
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
