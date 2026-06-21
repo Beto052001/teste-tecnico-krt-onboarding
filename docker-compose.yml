@@ -1,0 +1,24 @@
+# Stack local do teste KRT — totalmente isolada (nomes, volume e portas próprios)
+# para não colidir com outros containers/Postgres/Redis já em execução na máquina.
+name: krt-onboarding
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: krt-onboarding-postgres
+    environment:
+      POSTGRES_DB: krt_onboarding
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "55432:5432"   # host 55432 -> container 5432
+    volumes:
+      - krt-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d krt_onboarding"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  krt-postgres-data:
