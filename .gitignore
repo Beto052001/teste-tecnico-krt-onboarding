@@ -1,0 +1,49 @@
+## .NET / Visual Studio
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+*.swp
+
+## Rider
+.idea/
+
+## Build results
+artifacts/
+TestResults/
+[Tt]est[Rr]esult*/
+coverage/
+*.coverage
+*.coveragexml
+*.trx
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+!**/packages/build/
+
+## EF Core
+*.db
+*.db-shm
+*.db-wal
+
+## App secrets / env
+appsettings.*.local.json
+*.env
+.env
+secrets.json
+
+## OS
+Thumbs.db
+.DS_Store
