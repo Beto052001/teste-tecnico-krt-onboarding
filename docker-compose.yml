@@ -20,5 +20,16 @@ services:
       timeout: 5s
       retries: 10
 
+  redis:
+    image: redis:7-alpine
+    container_name: krt-onboarding-redis
+    ports:
+      - "56379:6379"   # host 56379 -> container 6379 (analogo ao ElastiCache)
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
   krt-postgres-data:
