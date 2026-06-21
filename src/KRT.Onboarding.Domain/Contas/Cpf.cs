@@ -22,13 +22,24 @@ public sealed partial class Cpf : ValueObject
     {
         DomainException.Requer(!string.IsNullOrWhiteSpace(entrada), "CPF é obrigatório.");
 
-        var digitos = SomenteDigitos().Replace(entrada!, string.Empty);
-
-        DomainException.Requer(digitos.Length == Tamanho, "CPF deve conter 11 dígitos.");
-        DomainException.Requer(!TodosDigitosIguais(digitos), "CPF inválido.");
-        DomainException.Requer(DigitosVerificadoresValidos(digitos), "CPF inválido.");
+        var digitos = Limpar(entrada!);
+        DomainException.Requer(DigitosValidos(digitos), "CPF inválido.");
 
         return new Cpf(digitos);
+    }
+
+    /// <summary>
+    /// Verifica se uma entrada é um CPF válido sem lançar exceção. Fonte única da regra,
+    /// reaproveitada pela validação de entrada (FluentValidation) na camada de aplicação.
+    /// </summary>
+    public static bool EhValido(string? entrada)
+    {
+        if (string.IsNullOrWhiteSpace(entrada))
+        {
+            return false;
+        }
+
+        return DigitosValidos(Limpar(entrada));
     }
 
     /// <summary>Representação com máscara: 000.000.000-00.</summary>
@@ -41,6 +52,13 @@ public sealed partial class Cpf : ValueObject
     {
         yield return Valor;
     }
+
+    private static string Limpar(string entrada) => SomenteDigitos().Replace(entrada, string.Empty);
+
+    private static bool DigitosValidos(string digitos) =>
+        digitos.Length == Tamanho
+        && !TodosDigitosIguais(digitos)
+        && DigitosVerificadoresValidos(digitos);
 
     private static bool TodosDigitosIguais(string digitos) =>
         digitos.All(c => c == digitos[0]);
