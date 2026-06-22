@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Build e testes
+    runs-on: ubuntu-latest
+    # O runner ubuntu-latest já traz o Docker, então os testes de integração
+    # (Testcontainers: Postgres + Redis) rodam aqui sem configuração extra.
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore KRT.Onboarding.sln
+
+      - name: Build
+        run: dotnet build KRT.Onboarding.sln -c Release --no-restore
+
+      - name: Testes (domínio, aplicação e integração)
+        run: dotnet test KRT.Onboarding.sln -c Release --no-build --verbosity normal
