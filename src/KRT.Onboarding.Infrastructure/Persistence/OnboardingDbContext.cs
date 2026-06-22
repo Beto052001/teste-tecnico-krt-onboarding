@@ -1,5 +1,6 @@
 using KRT.Onboarding.Application.Contas.Abstractions;
 using KRT.Onboarding.Domain.Contas;
+using KRT.Onboarding.Infrastructure.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace KRT.Onboarding.Infrastructure.Persistence;
@@ -15,6 +16,8 @@ public sealed class OnboardingDbContext : DbContext, IUnitOfWork
     }
 
     public DbSet<Conta> Contas => Set<Conta>();
+
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
     public Task<int> CommitAsync(CancellationToken cancellationToken = default) =>
         SaveChangesAsync(cancellationToken);

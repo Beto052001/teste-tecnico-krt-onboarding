@@ -31,5 +31,17 @@ services:
       timeout: 3s
       retries: 10
 
+  # Emula a AWS localmente (EventBridge + SQS), sem custo. Analogo ao Amazon EventBridge.
+  localstack:
+    image: localstack/localstack:3
+    container_name: krt-onboarding-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: events,sqs
+      DEBUG: "0"
+    volumes:
+      - ./localstack/init:/etc/localstack/init/ready.d
+
 volumes:
   krt-postgres-data:
