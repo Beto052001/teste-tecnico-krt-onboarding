@@ -141,10 +141,10 @@ Sobe, com nomes/portas próprios para não colidir com nada já instalado:
 ### 2. Aplicar as migrations
 ```bash
 dotnet tool restore
-dotnet ef database update \
-  --project src/KRT.Onboarding.Infrastructure \
-  --startup-project src/KRT.Onboarding.Api
+dotnet ef database update --project src/KRT.Onboarding.Infrastructure
 ```
+O `dotnet ef` usa a fábrica de design-time (`OnboardingDbContextFactory`) — não precisa
+subir a API. A connection string pode ser sobrescrita por `CONNECTIONSTRINGS__POSTGRES`.
 
 ### 3. Rodar a API
 ```bash
